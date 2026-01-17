@@ -76,6 +76,9 @@ const Mascot = ({ containerRef }: MascotProps) => {
         };
     }, []);
 
+    const lastScrollPos = useRef(0);
+    const facingRight = useRef(true);
+
     // Scroll Handler
     useEffect(() => {
         const container = containerRef.current;
@@ -86,21 +89,39 @@ const Mascot = ({ containerRef }: MascotProps) => {
             const maxScroll = container.scrollWidth - container.clientWidth;
             const progress = maxScroll > 0 ? scrollPos / maxScroll : 0;
 
+            // Determine Direction
+            const diff = scrollPos - lastScrollPos.current;
+            if (Math.abs(diff) > 0.5) { // Small threshold to avoid noise
+                if (diff > 0) {
+                    facingRight.current = true;
+                } else if (diff < 0) {
+                    facingRight.current = false;
+                }
+            }
+            lastScrollPos.current = scrollPos;
+
             // 1. Scrub Walk
             const walkAnim = walkAnimRef.current;
             if (walkAnim && walkAnim.isLoaded) {
                 const totalFrames = walkAnim.totalFrames > 0 ? walkAnim.totalFrames : 60;
                 const pixelsPerFrame = 15;
-                const frame = (scrollPos / pixelsPerFrame) % totalFrames;
+                let frame = (scrollPos / pixelsPerFrame) % totalFrames;
+
+                // Reverse animation when walking backwards so it looks like walking forward
+                if (!facingRight.current) {
+                    frame = (totalFrames - frame) % totalFrames;
+                }
+
                 walkAnim.goToAndStop(frame, true);
             }
 
-            // 2. Lateral Movement
+            // 2. Lateral Movement & Flip
             const moveDistanceOfScreen = window.innerWidth * 0.88;
             const currentX = progress * moveDistanceOfScreen;
+            const scaleX = facingRight.current ? 1 : -1;
 
             if (wrapperRef.current) {
-                wrapperRef.current.style.transform = `translateX(${currentX}px) translateZ(0)`;
+                wrapperRef.current.style.transform = `translateX(${currentX}px) translateZ(0) scaleX(${scaleX})`;
             }
 
             // 3. State Switching (SKIP on initial load)
