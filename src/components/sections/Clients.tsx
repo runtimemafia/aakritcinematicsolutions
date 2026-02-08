@@ -51,7 +51,7 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
             </div>
 
             <div className="relative z-10 w-full max-w-6xl px-8">
-                <div className="flex flex-col gap-12 lg:flex-row">
+                <div className="flex items-center justify-center">
 
                     {/* LEFT: Static content */}
                     <div className="flex-1 space-y-6">
@@ -83,25 +83,65 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
 
                         {invoice && (
                             <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.6 }}
-                                className="rounded-xl border border-white/10 bg-black/30 backdrop-blur-md p-6 space-y-3"
+                                initial={{ opacity: 0, y: 60, scale: 0.95 }}
+                                animate={{
+                                    opacity: 1,
+                                    y: [0, -6, 0],   // floating up & down
+                                    scale: 1
+                                }}
+                                transition={{
+                                    opacity: { duration: 0.7 },
+                                    scale: { duration: 0.7 },
+                                    y: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+                                }}
+                                className="relative mx-auto w-full max-w-md"
                             >
-                                <p><strong>Name:</strong> {invoice.name}</p>
-                                <p><strong>Email:</strong> {invoice.email}</p>
-                                <p><strong>Address:</strong> {invoice.address}</p>
 
-                                <hr className="border-white/10" />
+                                {/* Hanging top bar */}
+                                <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-40 h-6 bg-neutral-800 rounded-md shadow-lg" />
 
-                                <p><strong>Invoice ID:</strong> {invoice.invoice_id}</p>
-                                <p><strong>Date:</strong> {invoice.invoice_date}</p>
-                                <p className="text-xl font-bold">
-                                    Total: ₹{invoice.total}
-                                </p>
+                                {/* Invoice Paper */}
+                                <div className="relative bg-white text-black rounded-b-xl shadow-2xl px-8 pt-10 pb-12 font-mono">
+
+                                    {/* Top perforation */}
+                                    <div className="absolute top-0 left-0 w-full h-3 bg-[repeating-linear-gradient(90deg,transparent,transparent_6px,#000_6px,#000_12px)] opacity-70" />
+
+                                    <h3 className="text-center text-2xl font-bold tracking-widest mb-6">
+                                        INVOICE
+                                    </h3>
+
+                                    <div className="space-y-2 text-sm">
+                                        <p><span className="font-semibold">Name:</span> {invoice.name}</p>
+                                        <p><span className="font-semibold">Email:</span> {invoice.email}</p>
+                                        <p><span className="font-semibold">Address:</span> {invoice.address}</p>
+                                    </div>
+
+                                    <div className="border-t border-dashed border-gray-400 my-6" />
+
+                                    <div className="space-y-2 text-sm">
+                                        <p><span className="font-semibold">Invoice #:</span> {invoice.invoice_id}</p>
+                                        <p>
+                                            <span className="font-semibold">Date:</span>{" "}
+                                            {new Date(invoice.invoice_date).toLocaleDateString()}
+                                        </p>
+                                    </div>
+
+                                    <div className="border-t border-dashed border-gray-400 my-6" />
+
+                                    <p className="text-right text-lg font-bold">
+                                        Total:{" "}
+                                        {new Intl.NumberFormat("en-IN", {
+                                            style: "currency",
+                                            currency: "INR",
+                                        }).format(invoice.total)}
+                                    </p>
+
+                                    {/* Bottom tear effect */}
+                                    <div className="absolute bottom-0 left-0 w-full h-3 bg-[repeating-linear-gradient(90deg,transparent,transparent_6px,#000_6px,#000_12px)] opacity-70" />
+                                </div>
                             </motion.div>
                         )}
+
                     </div>
 
                 </div>
