@@ -69,30 +69,39 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                     </div>
 
                     {/* Invoice Card Container - REMOVED mt-20 to allow flex centering */}
+                    {/* Invoice Card Container */}
                     <div className="w-full relative flex justify-center items-center">
                         {invoice && (
                             <motion.div
                                 initial={{ opacity: 0, y: 60 }}
                                 animate={{
                                     opacity: 1,
+                                    // This keeps the floating animation running constantly
                                     y: [0, -15, 0],
                                     rotateX: [0, 2, 0],
+                                }}
+                                // NEW: Pop-up effect that happens ON TOP of the floating
+                                whileHover={{
+                                    scale: 1.1,         // Pops out toward the user
+                                    rotateX: 0,         // Optional: flattens the paper for readability
+                                    transition: { duration: 0.2 }
                                 }}
                                 transition={{
                                     y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
                                     rotateX: { duration: 5, repeat: Infinity, ease: "easeInOut" }
                                 }}
-                                // YOUR SPECIFIED WIDTH
+                                // Added cursor-pointer so users know they can interact with it
                                 className="relative mx-auto w-[320px] sm:w-[350px] [perspective:1000px]"
                             >
                                 {/* The Clip/Hanging Bar */}
                                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-32 h-5 bg-stone-800 rounded-t-md shadow-lg z-20" />
 
-                                {/* Invoice Paper - YOUR SPECIFIED COLOR AND HEIGHT */}
-                                <div className="relative bg-[#F5F1E8] text-[#3E322B] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.4)] px-8 py-20 font-mono flex flex-col items-center justify-center text-center min-h-[350px] border border-[#DED4C1]">
+                                {/* Invoice Paper - Added transition and hover shadow */}
+                                <div className="relative bg-[#F5F1E8] text-[#3E322B] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.4)] transition-all duration-300 hover:shadow-[0_80px_150px_-20px_rgba(0,0,0,0.6)] px-8 py-20 font-mono flex flex-col items-center justify-center text-center min-h-[350px] border border-[#DED4C1]">
 
                                     <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')]" />
 
+                                    {/* --- Content Inside --- */}
                                     <div className="mb-auto">
                                         <h3 className="text-2xl font-black tracking-[0.3em] mb-2 border-b-2 border-stone-800 pb-1">
                                             INVOICE
