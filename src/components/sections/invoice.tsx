@@ -21,7 +21,7 @@ export default function Invoice() {
     if (!invoice) return <p>Loading...</p>;
 
     return (
-        <div style={{ width: "600px", margin: "auto", border: "1px solid #000", padding: "20px" }}>
+        <div style={{ width: "200px", margin: "auto", border: "1px solid #000", padding: "20px" }}>
             <h2>Invoice #{invoice.invoice_id}</h2>
             <p><strong>Date:</strong> {invoice.invoice_date}</p>
 
