@@ -2,155 +2,246 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
 
-import UrviSvg from '../../assets/Team/URvi-01.svg';
-import ChiragSvg from '../../assets/Team/CHIRAG-01.svg';
-import ParasSvg from '../../assets/Team/PARAS-01.svg';
-import RupeshSvg from '../../assets/Team/RUPESH-01.svg';
+import UrviSvg from '../../assets/URvi-01.svg';
+import ChiragSvg from '../../assets/CHIRAG-01.svg';
+import ParasSvg from '../../assets/PARAS-01.svg';
+import RupeshSvg from '../../assets/RUPESH-01.svg';
 
 interface TeamMember {
-  name: string;
-  position: string;
-  role: string;
-  image: string;
+    id: number;
+    name: string;
+    role: string;
+    description: string;
+    image: string;
 }
 
 const teamMembers: TeamMember[] = [
-  { name: 'Urvi Shah', position: 'Founder', role: 'Creative Director & Visionary behind Aarkit Cinematic Solutions', image: UrviSvg },
-  { name: 'Chirag', position: 'Cinematographer', role: 'Capturing cinematic visuals with precision and artistry', image: ChiragSvg },
-  { name: 'Paras', position: 'Editor', role: 'Crafting seamless narratives through post-production excellence', image: ParasSvg },
-  { name: 'Rupesh', position: 'VFX Artist', role: 'Bringing imagination to life with stunning visual effects', image: RupeshSvg },
+    {
+        id: 1,
+        name: "Urvi Shah",
+        role: "Founder & Studio Head",
+        description: "Visionary leader driving Aakrit's mission to elevate Indian animation to global standards through creative excellence and strategic innovation.",
+        image: UrviSvg,
+    },
+    {
+        id: 2,
+        name: "Chirag K. Mali",
+        role: "Creative Head",
+        description: "Artistic visionary specializing in immersive visual storytelling and conceptual architecture, transforming bold ideas into cinematic reality.",
+        image: ChiragSvg,
+    },
+    {
+        id: 3,
+        name: "Paras Sharma",
+        role: "3D Generalist",
+        description: "Technical expert in high-fidelity computer graphics, dedicated to crafting hyper-realistic environments and seamless visual effects.",
+        image: ParasSvg,
+    },
+    {
+        id: 4,
+        name: "Rupesh Gupta",
+        role: "Multimedia Artist",
+        description: "Versatile multimedia expert specializing in high-impact visual storytelling, motion design, and integrated digital experiences that bridge art and technology.",
+        image: RupeshSvg,
+    },
 ];
 
 interface AboutProps {
-  id?: string;
-  className?: string;
+    id?: string;
+    className?: string;
 }
 
 const About = ({ id = 'about', className }: AboutProps) => {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [tappedIndex, setTappedIndex] = useState<number | null>(null);
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+    const [tappedIndex, setTappedIndex] = useState<number | null>(null);
 
-  const activeIndex = hoveredIndex ?? tappedIndex;
+    const activeIndex = hoveredIndex ?? tappedIndex;
 
-  const handleTap = (index: number) => {
-    setTappedIndex(prev => (prev === index ? null : index));
-  };
+    const handleTap = (index: number) => {
+        setTappedIndex(prev => (prev === index ? null : index));
+    };
 
-  return (
-    <section
-      id={id}
-      className={clsx(
-        'h-[100dvh] w-screen flex flex-col items-center justify-center flex-shrink-0 relative overflow-hidden',
-        className
-      )}
-      style={{ background: '#F2DD5E' }}
-    >
-      {/* Heading */}
-      <motion.h2
-        initial={{ opacity: 0, y: -20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 md:mb-14 text-center"
-        style={{ fontFamily: "'UnifrakturCook', cursive", color: '#1a1a1a' }}
-      >
-        About Us
-      </motion.h2>
-
-      {/* Team Cards Row */}
-      <div className="w-full max-w-7xl px-4 md:px-8">
-        <div className="flex flex-nowrap gap-5 md:gap-6 lg:gap-8 justify-center overflow-x-auto lg:overflow-visible pb-4 lg:pb-0 snap-x snap-mandatory lg:snap-none">
-          {teamMembers.map((member, index) => {
-            const isActive = activeIndex === index;
-            const hasActive = activeIndex !== null;
-
-            return (
-              <motion.div
-                key={member.name}
-                className="relative flex-shrink-0 snap-center"
-                style={{ width: 'clamp(220px, 22vw, 300px)' }}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                onClick={() => handleTap(index)}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.12, duration: 0.5 }}
-              >
-                {/* SVG Card - main visible card */}
+    return (
+        <section
+            id={id}
+            className={clsx(
+                'min-h-[100dvh] w-screen flex flex-col items-center justify-center flex-shrink-0 relative overflow-hidden',
+                className
+            )}
+        >
+            <div className="w-full max-w-7xl mx-auto px-4 relative z-10 flex flex-col items-center py-12 md:py-20 lg:py-24">
                 <motion.div
-                  className={clsx(
-                    'relative z-10 rounded-2xl overflow-hidden cursor-pointer transition-all duration-500',
-                    hasActive && !isActive && 'blur-[3px] scale-[0.96] opacity-50'
-                  )}
-                  animate={{
-                    scale: isActive ? 1.05 : 1,
-                  }}
-                  transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  style={{
-                    boxShadow: isActive
-                      ? '0 20px 60px rgba(0,0,0,0.3), 0 0 0 2px #F2DD5E'
-                      : '0 8px 30px rgba(0,0,0,0.15)',
-                  }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="flex flex-col items-center justify-center space-y-4 mb-16 md:mb-24 lg:mb-32"
                 >
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-auto block"
-                    draggable={false}
-                  />
-
+                    <h1
+                        className="text-5xl sm:text-6xl md:text-8xl lg:text-[60rem] font-black tracking-tighter text-black/10 drop-shadow-[0_4px_12px_rgba(0,0,0,0.1)] text-center select-none uppercase leading-none whitespace-nowrap lg:whitespace-normal"
+                        style={{ fontFamily: "'Special Gothic Expanded One', sans-serif" }}
+                    >
+                        About Us
+                    </h1>
+                    <div className="h-1.5 w-24 md:h-2 md:w-96 bg-black rounded-full opacity-60 shadow-md shrink-0" />
                 </motion.div>
 
-                {/* Info card sliding out to the right from behind */}
-                <AnimatePresence>
-                  {isActive && (
-                    <motion.div
-                      initial={{ x: 0, opacity: 0 }}
-                      animate={{ x: '90%', opacity: 1 }}
-                      exit={{ x: 0, opacity: 0 }}
-                      transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-                      className="absolute top-0 left-0 z-0 rounded-2xl px-5 py-6 flex flex-col justify-center"
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        background: 'linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%)',
-                        boxShadow: '-4px 4px 24px rgba(0,0,0,0.4)',
-                        border: '1.5px solid #F2DD5E',
-                      }}
-                    >
-                      <p
-                        className="text-base md:text-lg font-bold uppercase tracking-wider"
-                        style={{ color: '#F2DD5E' }}
-                      >
-                        {member.name}
-                      </p>
-                      <p
-                        className="text-xs md:text-sm font-semibold uppercase tracking-widest mt-1"
-                        style={{ color: '#E0C040' }}
-                      >
-                        {member.position}
-                      </p>
-                      <p
-                        className="text-[11px] md:text-xs mt-3 leading-relaxed"
-                        style={{ color: '#bbb' }}
-                      >
-                        {member.role}
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                {/* Team Cards Container */}
+                <div className="flex flex-wrap lg:flex-nowrap gap-10 md:gap-16 lg:gap-20 justify-center w-full px-4 overflow-visible">
+                    {teamMembers.map((member, index) => {
+                        const isActive = activeIndex === index;
+                        const hasActive = activeIndex !== null;
+                        const isLastCard = index === teamMembers.length - 1;
 
-                {/* Mobile: always-visible name below card */}
-                <div className="lg:hidden mt-3 text-center">
-                  <p className="text-xs font-bold" style={{ color: '#1a1a1a' }}>{member.name}</p>
-                  <p className="text-[10px]" style={{ color: '#555' }}>{member.position}</p>
+                        return (
+                            <motion.div
+                                key={member.name}
+                                className={clsx(
+                                    "relative flex-shrink-0 group transition-all duration-500",
+                                    isActive ? "z-50" : "z-10"
+                                )}
+                                style={{ width: 'clamp(220px, 18vw, 280px)' }}
+                                onMouseEnter={() => setHoveredIndex(index)}
+                                onMouseLeave={() => setHoveredIndex(null)}
+                                onClick={() => handleTap(index)}
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.1, duration: 0.5 }}
+                            >
+                                <div
+                                    className="relative"
+                                    style={{
+                                        perspective: '1200px',
+                                        width: 'clamp(220px, 18vw, 280px)',
+                                        height: '100%',
+                                        minHeight: typeof window !== 'undefined' && window.innerWidth < 1024 ? '380px' : 'auto'
+                                    }}
+                                >
+                                    <motion.div
+                                        className="relative w-full h-full"
+                                        style={{ transformStyle: 'preserve-3d' }}
+                                        animate={{
+                                            rotateY: (typeof window !== 'undefined' && window.innerWidth < 1024 && isActive) ? 180 : 0
+                                        }}
+                                        transition={{
+                                            type: "spring",
+                                            stiffness: 100,
+                                            damping: 20
+                                        }}
+                                    >
+                                        {/* Main SVG Card (Front Face on Mobile) */}
+                                        <motion.div
+                                            className={clsx(
+                                                'relative cursor-pointer transition-all duration-500 rounded-[2.5rem] md:rounded-[3rem]',
+                                                hasActive && !isActive && 'blur-sm scale-[0.9] opacity-30 shadow-none'
+                                            )}
+                                            animate={{
+                                                scale: isActive ? 1.05 : 1,
+                                                x: (isActive && isLastCard && typeof window !== 'undefined' && window.innerWidth >= 1024) ? '-40%' : '0%',
+                                            }}
+                                            transition={{
+                                                type: "spring",
+                                                stiffness: 260,
+                                                damping: 20
+                                            }}
+                                            style={{
+                                                zIndex: 40,
+                                                backfaceVisibility: typeof window !== 'undefined' && window.innerWidth < 1024 ? 'hidden' : 'visible',
+                                                boxShadow: isActive
+                                                    ? '0 40px 80px rgba(0,0,0,0.6), 0 0 30px rgba(242,221,94,0.3)'
+                                                    : '0 15px 35px rgba(0,0,0,0.15)',
+                                            }}
+                                        >
+                                            <img
+                                                src={member.image}
+                                                alt={member.name}
+                                                className="w-full h-auto block rounded-[2.5rem] md:rounded-[3rem]"
+                                                draggable={false}
+                                            />
+                                        </motion.div>
+
+                                        {/* Info Panel - Slides on desktop, Back face on mobile */}
+                                        <AnimatePresence>
+                                            {isActive && (
+                                                <motion.div
+                                                    initial={typeof window !== 'undefined' && window.innerWidth < 1024 ? {
+                                                        opacity: 0,
+                                                        rotateY: 180
+                                                    } : {
+                                                        x: '5%',
+                                                        opacity: 0,
+                                                        scale: 0.95
+                                                    }}
+                                                    animate={typeof window !== 'undefined' && window.innerWidth < 1024 ? {
+                                                        opacity: 1,
+                                                        rotateY: 180
+                                                    } : {
+                                                        x: isLastCard ? '30%' : '60%',
+                                                        opacity: 1,
+                                                        scale: 1
+                                                    }}
+                                                    exit={typeof window !== 'undefined' && window.innerWidth < 1024 ? {
+                                                        opacity: 0,
+                                                        rotateY: 180
+                                                    } : {
+                                                        x: '5%',
+                                                        opacity: 0,
+                                                        scale: 0.95
+                                                    }}
+                                                    transition={{
+                                                        type: "spring",
+                                                        stiffness: 150,
+                                                        damping: 25
+                                                    }}
+                                                    className="absolute z-10 rounded-[2.5rem] md:rounded-[4rem] flex flex-col justify-center border backdrop-blur-3xl overflow-hidden"
+                                                    style={{
+                                                        top: typeof window !== 'undefined' && window.innerWidth < 1024 ? '0' : '10%',
+                                                        left: '0',
+                                                        width: typeof window !== 'undefined' && window.innerWidth < 1024 ? '100%' : '160%',
+                                                        height: typeof window !== 'undefined' && window.innerWidth < 1024 ? '100%' : '80%',
+                                                        paddingLeft: typeof window !== 'undefined' && window.innerWidth < 1024 ? '1.5rem' : '35%',
+                                                        paddingRight: '1.5rem',
+                                                        paddingTop: '1.5rem',
+                                                        paddingBottom: '1.5rem',
+                                                        background: 'rgba(10, 10, 10, 0.98)',
+                                                        borderColor: 'rgba(242, 221, 94, 0.4)',
+                                                        boxShadow: '0 30px 60px rgba(0,0,0,0.8)',
+                                                        backfaceVisibility: typeof window !== 'undefined' && window.innerWidth < 1024 ? 'hidden' : 'visible',
+                                                        pointerEvents: typeof window !== 'undefined' && window.innerWidth < 1024 ? 'auto' : 'none',
+                                                        transform: typeof window !== 'undefined' && window.innerWidth < 1024 ? 'rotateY(180deg)' : 'none'
+                                                    }}
+                                                >
+                                                    <div className="space-y-3 md:space-y-4 text-left">
+                                                        <h3
+                                                            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tight leading-tight"
+                                                            style={{
+                                                                fontFamily: "'Special Gothic Expanded One', sans-serif",
+                                                                color: '#F2DD5E',
+                                                                textShadow: '0 2px 10px rgba(0,0,0,0.8)'
+                                                            }}
+                                                        >
+                                                            {member.name}
+                                                        </h3>
+                                                        <p className="text-xs sm:text-sm md:text-base font-extrabold uppercase tracking-[0.3em] md:tracking-[0.4em] text-[#F2DD5E]">
+                                                            {member.role}
+                                                        </p>
+                                                    </div>
+                                                    <div className="h-[2px] md:h-[3px] w-12 md:w-16 bg-[#F2DD5E] my-4 md:my-6 lg:my-8 rounded-full" />
+                                                    <p className="text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed font-bold text-[#FFA500]">
+                                                        {member.description}
+                                                    </p>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </motion.div>
+                                </div>
+                            </motion.div>
+                        );
+                    })}
                 </div>
-              </motion.div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
+            </div>
+        </section >
+    );
 };
 
 export default About;
