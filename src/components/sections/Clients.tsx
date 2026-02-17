@@ -6,6 +6,7 @@ import malaiccaLogo from "../../assets/logo/malaicca-logo-01.svg";
 import poonamSanduLogo from "../../assets/logo/poonam-sandu-interior-spacess-logo.svg";
 import sarnishLogo from "../../assets/logo/sarnish-logo.svg";
 import tdfLogo from "../../assets/logo/tdf-diamond-factory-india-private-limited-logo-01.svg";
+import filmStripBorder from "../../assets/logo/film-strip.svg";
 
 interface ClientsProps {
     id?: string;
@@ -26,6 +27,51 @@ const LOGO_DATA = [
     { src: tdfLogo, alt: "TDF" },
 ];
 
+/*
+  Film strip SVG canvas: 1000 × 741
+  Inner screen area (from SVG path data): x=87..906, y=138..596
+  → left:   87/1000       = 8.7%
+  → right:  (1000-906)/1000 = 9.4%
+  → top:    138/741       = 18.6%
+  → bottom: (741-596)/741 = 19.6%
+*/
+const FILM_INNER: React.CSSProperties = {
+    position: "absolute",
+    left: "8.7%",
+    right: "9.4%",
+    top: "18.6%",
+    bottom: "19.6%",
+    overflow: "hidden",
+    zIndex: 1,
+};
+
+/** Single reusable video-inside-filmstrip component */
+const FilmStripVideo = ({ youtubeId, title }: { youtubeId: string; title: string }) => (
+    <div style={{ position: "relative", width: "100%", paddingTop: "74.1%" }}>
+        <img
+            src={filmStripBorder}
+            alt=""
+            style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "fill",
+                pointerEvents: "none",
+                zIndex: 2,
+            }}
+        />
+        <div style={FILM_INNER}>
+            <iframe
+                style={{ width: "100%", height: "100%", display: "block" }}
+                src={`https://www.youtube.com/embed/${youtubeId}?modestbranding=1&rel=0`}
+                title={title}
+                allowFullScreen
+            />
+        </div>
+    </div>
+);
+
 const Clients = ({ id = "clients", className }: ClientsProps) => {
     return (
         <section
@@ -36,6 +82,9 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
             )}
         >
             <style>{`
+                /* ── Google Font: Special Gothic Expanded One ── */
+                @import url('https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap');
+
                 /* ── Marquee ── */
                 @keyframes marquee {
                     0%   { transform: translateX(0); }
@@ -123,6 +172,7 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         className="font-display text-[clamp(2.5rem,5vw,4rem)] font-bold text-black mb-12"
+                        style={{ fontFamily: "'Special Gothic Expanded One', sans-serif" }}
                     >
                         Our Feedback
                     </motion.h2>
@@ -135,33 +185,10 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-
                                 transition={{ delay: index * 0.1 }}
-                                style={{
-                                    flexShrink: 0,
-                                    width: "420px",
-                                    aspectRatio: "3/2",
-                                    position: "relative",
-                                }}
+                                style={{ flexShrink: 0, width: "420px" }}
                             >
-                                <div
-                                    style={{
-                                        position: "relative",
-                                        height: "90%",
-                                        width: "100%",
-                                        backgroundColor: "black",
-                                        borderRadius: "1.5rem",
-                                        overflow: "hidden",
-                                        border: "6px solid #0e1201ff",
-                                    }}
-                                >
-                                    <iframe
-                                        style={{ width: "100%", height: "100%" }}
-                                        src={`https://www.youtube.com/embed/${video.youtubeId}?modestbranding=1&rel=0`}
-                                        title={video.title}
-                                        allowFullScreen
-                                    />
-                                </div>
+                                <FilmStripVideo youtubeId={video.youtubeId} title={video.title} />
                             </motion.div>
                         ))}
                     </div>
@@ -178,26 +205,8 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: index * 0.1 }}
-                                    style={{ position: "relative", aspectRatio: "3/2", width: "100%" }}
                                 >
-                                    <div
-                                        style={{
-                                            position: "relative",
-                                            height: "100%",
-                                            width: "100%",
-                                            backgroundColor: "black",
-                                            borderRadius: "1rem",
-                                            overflow: "hidden",
-                                            border: "4px solid #0a0a0a",
-                                        }}
-                                    >
-                                        <iframe
-                                            style={{ width: "100%", height: "100%" }}
-                                            src={`https://www.youtube.com/embed/${video.youtubeId}?modestbranding=1&rel=0`}
-                                            title={video.title}
-                                            allowFullScreen
-                                        />
-                                    </div>
+                                    <FilmStripVideo youtubeId={video.youtubeId} title={video.title} />
                                 </motion.div>
                             ))}
                         </div>
@@ -208,26 +217,9 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.2 }}
-                            style={{ position: "relative", aspectRatio: "3/2", width: "70%" }}
+                            style={{ width: "70%" }}
                         >
-                            <div
-                                style={{
-                                    position: "relative",
-                                    height: "100%",
-                                    width: "100%",
-                                    backgroundColor: "black",
-                                    borderRadius: "1rem",
-                                    overflow: "hidden",
-                                    border: "4px solid #0a0a0a",
-                                }}
-                            >
-                                <iframe
-                                    style={{ width: "100%", height: "100%" }}
-                                    src={`https://www.youtube.com/embed/${VIDEO_DATA[2].youtubeId}?modestbranding=1&rel=0`}
-                                    title={VIDEO_DATA[2].title}
-                                    allowFullScreen
-                                />
-                            </div>
+                            <FilmStripVideo youtubeId={VIDEO_DATA[2].youtubeId} title={VIDEO_DATA[2].title} />
                         </motion.div>
                     </div>
 
@@ -236,8 +228,9 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
 
             {/* ── INFINITE LOGO SCROLLER ── */}
             <div className="relative z-10 w-full mt-[5vh] bg-black py-12">
-                <div className="px-[5vw] mb-8">
-                    <h3 className="text-white/30 text-4xl md:text-6xl font-bold tracking-tighter uppercase italic">
+                <div className="px-[5vw] mb-8" style={{ marginTop: "-2rem" }}>
+                    <h3 className="text-white/30 text-4xl md:text-6xl font-bold tracking-tighter uppercase italic"
+                        style={{ fontFamily: "'Special Gothic Expanded One', sans-serif" }}>
                         WE WORKED WITH
                     </h3>
                 </div>
