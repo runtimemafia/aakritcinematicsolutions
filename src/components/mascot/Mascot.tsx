@@ -13,7 +13,6 @@ interface MascotProps {
 }
 
 const Mascot = ({ containerRef, onLandingComplete, startLanding = true }: MascotProps & { onLandingComplete?: () => void }) => {
-    console.log('[Mascot] Render', { startLanding });
     const walkContainerRef = useRef<HTMLDivElement>(null);
     const idleContainerRef = useRef<HTMLDivElement>(null);
     const landingContainerRef = useRef<HTMLDivElement>(null);
@@ -32,9 +31,7 @@ const Mascot = ({ containerRef, onLandingComplete, startLanding = true }: Mascot
 
     // Watch for startLanding signal
     useEffect(() => {
-        console.log('[Mascot] startLanding changed:', startLanding);
         if (startLanding && landingAnimRef.current && landingAnimRef.current.isPaused) {
-            console.log('[Mascot] Playing landing animation');
             landingAnimRef.current.play();
         }
     }, [startLanding]);
@@ -42,7 +39,7 @@ const Mascot = ({ containerRef, onLandingComplete, startLanding = true }: Mascot
     const handleLandingComplete = useCallback(() => {
         if (!wrapperRef.current) return;
 
-        console.log('[Mascot] handleLandingComplete triggered');
+
 
         // Notify parent
         if (onLandingComplete) onLandingComplete();
@@ -105,14 +102,12 @@ const Mascot = ({ containerRef, onLandingComplete, startLanding = true }: Mascot
                 });
 
                 landingAnimRef.current.addEventListener('DOMLoaded', () => {
-                    console.log('[Mascot] Landing DOMLoaded');
                     if (startLanding) {
                         landingAnimRef.current?.play();
                     }
                 });
 
                 landingAnimRef.current.addEventListener('complete', () => {
-                    console.log('[Mascot] Landing animation complete');
                     handleLandingComplete();
                 });
 
@@ -126,7 +121,7 @@ const Mascot = ({ containerRef, onLandingComplete, startLanding = true }: Mascot
             idleAnimRef.current?.destroy();
             landingAnimRef.current?.destroy();
         };
-    }, [handleLandingComplete, startLanding]); // Re-run if landing handler changes
+    }, [handleLandingComplete, startLanding, isDesktop]); // Re-run if landing handler changes
 
 
 

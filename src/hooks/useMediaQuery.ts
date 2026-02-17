@@ -21,8 +21,7 @@ export const useMediaQuery = (query: string) => {
     };
 
 
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMatches(mediaQuery.matches);
+
 
 
     if (typeof mediaQuery.addEventListener === 'function') {

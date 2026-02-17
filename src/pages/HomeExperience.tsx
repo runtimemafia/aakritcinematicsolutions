@@ -25,7 +25,7 @@ const HomeExperience = ({ onLandingComplete }: HomeExperienceProps) => {
     const navigate = useNavigate();
 
     const handleLandingComplete = useCallback(() => {
-        console.log('[HomeExperience] handleLandingComplete');
+
         setShowBackground(true);
         setIsLandingComplete(true);
         onLandingComplete?.();
