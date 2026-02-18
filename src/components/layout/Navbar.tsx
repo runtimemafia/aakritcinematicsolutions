@@ -67,19 +67,19 @@ const Navbar = ({ isVisible = true }: NavbarProps) => {
                         isolation: 'isolate',
                         fontFamily: 'var(--font-primary)',
                         background:
-                            'linear-gradient(135deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.06))',
-                        backdropFilter: 'saturate(120%) blur(18px)',
-                        WebkitBackdropFilter: 'saturate(120%) blur(18px)',
-                        borderBottom: '1px solid rgba(255, 255, 255, 0.18)',
+                            'linear-gradient(135deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0))',
+                        backdropFilter: 'saturate(100%) blur(6px)',
+                        WebkitBackdropFilter: 'saturate(100%) blur(6px)',
+                        borderBottom: '1px solid rgba(255, 255, 255, 0.02)',
                         boxShadow:
-                            '0 16px 34px rgba(0, 0, 0, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.32)',
+                            '0 4px 30px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
                     }}
                 >
                     <div
                         className="pointer-events-none absolute inset-0"
                         style={{
                             background:
-                                'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.015) 58%, rgba(255,255,255,0) 100%)',
+                                'linear-gradient(180deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0) 100%)',
                         }}
                     />
                     <div
@@ -117,10 +117,11 @@ const Navbar = ({ isVisible = true }: NavbarProps) => {
                                             border: 'none',
                                             appearance: 'none',
                                             color: '#1a1a1a',
-                                            fontWeight: 600,
+                                            fontWeight: 'bold',
                                             fontSize: '13px',
                                             textTransform: 'uppercase',
                                             letterSpacing: '0.04em',
+                                            fontFamily: 'var(--font-primary)',
                                         }}
                                     >
                                         {section.label}
@@ -181,7 +182,7 @@ const Navbar = ({ isVisible = true }: NavbarProps) => {
                                                             w-full
                                                             rounded-full
                                                             px-6
-                                                            text-[20px] font-semibold tracking-wide text-[#1a1a1a]
+                                                            text-[20px] font-bold tracking-wide text-[#1a1a1a]
                                                             transition-all duration-200 ease-out
                                                             hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98]
                                                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50
