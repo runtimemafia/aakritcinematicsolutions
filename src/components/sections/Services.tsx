@@ -1,6 +1,7 @@
-import { motion } from 'framer-motion';
-import { Camera, Clapperboard, MonitorPlay, Mic2 } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { useInView } from 'framer-motion';
 import clsx from 'clsx';
+import Folder from '../ui/Folder';
 
 interface ServicesProps {
     id?: string;
@@ -8,69 +9,99 @@ interface ServicesProps {
 }
 
 const Services = ({ id = "services", className }: ServicesProps) => {
-    const services = [
-        {
-            icon: <Clapperboard className="w-8 h-8" />,
-            title: "Film Production",
-            description: "End-to-end production for commercials, documentaries, and branded content with cinema-grade quality."
-        },
-        {
-            icon: <Camera className="w-8 h-8" />,
-            title: "Photography",
-            description: "High-end product, fashion, and editorial photography that captures the essence of your brand."
-        },
-        {
-            icon: <MonitorPlay className="w-8 h-8" />,
-            title: "Post-Production",
-            description: "Advanced editing, color grading, and VFX to polish your visual narrative to perfection."
-        },
-        {
-            icon: <Mic2 className="w-8 h-8" />,
-            title: "Sound Design",
-            description: "Immersive audio engineering and custom soundscapes that elevate the visual experience."
-        }
-    ];
+    const containerRef = useRef(null);
+    const isInView = useInView(containerRef, { once: true, amount: 0.3 });
+
+    const [centerOpen, setCenterOpen] = useState(false);
+    const [leftOpen, setLeftOpen] = useState(false);
+    const [rightOpen, setRightOpen] = useState(false);
+
+    useEffect(() => {
+        if (!isInView) return;
+
+        // Open center folder immediately when in view
+        const centerTimer = setTimeout(() => {
+            setCenterOpen(true);
+        }, 500);
+
+        // Open left and right folders after a delay
+        const sideTimer = setTimeout(() => {
+            setLeftOpen(true);
+            setRightOpen(true);
+        }, 800);
+
+        return () => {
+            clearTimeout(centerTimer);
+            clearTimeout(sideTimer);
+        };
+    }, [isInView]);
 
     return (
         <section
+            ref={containerRef}
             id={id}
             className={clsx(
-                "h-[100dvh] w-screen flex items-center justify-center bg-background flex-shrink-0 relative overflow-hidden py-20 lg:pt-48 lg:pb-10",
+                "h-[100dvh] w-full flex items-center justify-center bg-background flex-shrink-0 relative overflow-hidden pt-32 pb-20 lg:pt-48 lg:pb-10",
                 className
             )}
         >
-            <div className="max-w-7xl px-8 w-full">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="mb-16"
-                >
-                    <span className="text-accent text-xs uppercase tracking-[0.3em] font-mono mb-4 block">Our Expertise</span>
-                    <h2 className="text-display-md font-display font-bold text-text mb-6">
-                        Comprehensive<br />
-                        <span className="text-accent">Solutions</span>
-                    </h2>
-                </motion.div>
+            <div className="max-w-7xl px-8 w-full flex items-center justify-center h-full">
+                <div style={{ height: '600px', position: 'relative', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    {/* Left Folder */}
+                    <div style={{ position: 'absolute', left: '15%', top: '60%', transform: 'translate(-50%, -50%)', zIndex: 30 }}>
+                        <Folder
+                            size={1.6}
+                            color="#5227FF"
+                            className="custom-folder"
+                            maxVisibleItems={3}
+                            isOpen={leftOpen}
+                            onToggle={() => setLeftOpen(prev => !prev)}
+                            items={[
+                                <div className="w-full h-full flex items-center justify-center p-2 text-center font-display font-bold text-black text-[10px] leading-tight">Product<br />Packshot</div>,
+                                <div className="w-full h-full flex items-center justify-center p-2 text-center font-display font-bold text-black text-[10px] leading-tight">Digital &<br />Corporate Films</div>,
+                                <div className="w-full h-full flex items-center justify-center p-2 text-center font-display font-bold text-black text-[10px] leading-tight">Editing</div>,
+                            ]}
+                        />
+                    </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {services.map((service, index) => (
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.1, duration: 0.5 }}
-                            className="bg-primary/50 backdrop-blur-sm border border-white/10 p-8 hover:border-accent/50 transition-colors duration-300 group"
-                        >
-                            <div className="text-accent mb-6 group-hover:scale-110 transition-transform duration-300">
-                                {service.icon}
-                            </div>
-                            <h3 className="text-xl font-bold text-text mb-4">{service.title}</h3>
-                            <p className="text-muted text-sm leading-relaxed">
-                                {service.description}
-                            </p>
-                        </motion.div>
-                    ))}
+                    {/* Center Folder */}
+                    <div style={{ zIndex: 20, position: 'relative' }}>
+                        <Folder
+                            size={2}
+                            color="#5227FF"
+                            className="custom-folder"
+                            maxVisibleItems={4}
+                            isOpen={centerOpen}
+                            onToggle={() => setCenterOpen(prev => !prev)}
+                            items={[
+                                <div className="w-full h-full flex items-center justify-center p-2 text-center font-display font-bold text-black text-[10px] leading-tight">VFX</div>,
+                                <div className="w-full h-full flex items-center justify-center p-2 text-center font-display font-bold text-black text-[10px] leading-tight">Animation<br />(2D & 3D)</div>,
+                                <div className="w-full h-full flex items-center justify-center p-2 text-center font-display font-bold text-black text-[10px] leading-tight">3D Modelling</div>,
+                                <div className="w-full h-full flex items-center justify-center p-2 text-center font-display font-bold text-black text-[10px] leading-tight">Architectural<br />Walkthrough</div>
+                            ]}
+                        />
+                    </div>
+
+                    {/* Right Folder */}
+                    <div style={{ position: 'absolute', left: '85%', top: '60%', transform: 'translate(-50%, -50%)', zIndex: 30 }}>
+                        <Folder
+                            size={1.6}
+                            color="#5227FF"
+                            className="custom-folder"
+                            maxVisibleItems={3}
+                            isOpen={rightOpen}
+                            onToggle={() => setRightOpen(prev => !prev)}
+                            items={[
+                                <div className="w-full h-full flex items-center justify-center p-2 text-center font-display font-bold text-black text-[10px] leading-tight">Pre-Visualisation</div>,
+                                <div className="w-full h-full flex items-center justify-center p-2 text-center font-display font-bold text-black text-[10px] leading-tight">Layout<br />Animation</div>,
+                                <div className="w-full h-full flex items-center justify-center p-2 text-center font-display font-bold text-black text-[10px] leading-tight">Story Boarding<br />& Concept Art</div>,
+                            ]}
+                        />
+                    </div>
+
+                    <div className="absolute bottom-[-2%] left-1/2 -translate-x-1/2 text-center z-30 pointer-events-none w-full">
+                        <h2 className="text-[4rem] md:text-[10rem] font-display font-bold text-text uppercase tracking-widest drop-shadow-sm leading-none opacity-90">Our Services</h2>
+                    </div>
                 </div>
             </div>
         </section>

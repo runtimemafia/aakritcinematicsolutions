@@ -14,9 +14,11 @@ export default {
       text: "#1a1a1a", // Dark text for light background
       muted: "#555555", // Darker muted for visibility
       border: "#E0C040", // Darker binding yellow
-      sans: ['Retroica', 'system-ui', 'sans-serif'],
-      display: ['Retroica', 'Outfit', 'Inter', 'sans-serif'], // Updated to Outfit for display text
-      mono: ['JetBrains Mono', 'monospace'],
+      sans: ['Retroica'],
+      display: ['Retroica'],
+      mono: ['Retroica'],
+      serif: ['Retroica'],
+      body: ['Retroica'],
     },
     fontSize: {
       'display-xl': ['clamp(3rem, 8vw, 8rem)', { lineHeight: '0.95', letterSpacing: '-0.04em' }],

@@ -34,7 +34,7 @@ const Hero = ({ id = "hero", isLandingComplete = true }: HeroProps) => {
     return (
         <section
             id={id}
-            className="relative flex min-h-screen w-screen flex-shrink-0 items-center justify-center overflow-hidden bg-background"
+            className="relative flex min-h-screen w-screen flex-shrink-0 items-center justify-center overflow-hidden bg-background pt-32"
         >
             <motion.div
                 className="relative z-10 flex flex-col items-start text-left"

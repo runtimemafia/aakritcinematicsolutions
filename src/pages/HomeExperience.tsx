@@ -8,6 +8,7 @@ import Services from '../components/sections/Services';
 import Gallery from '../components/sections/Gallery';
 import Projects from '../components/sections/Projects';
 import Clients from '../components/sections/Clients';
+import Team from '../components/sections/Team';
 import Contact from '../components/sections/Contact';
 import CanvasCursor from '../components/ui/CanvasCursor';
 import useMediaQuery from '../hooks/useMediaQuery';
@@ -38,9 +39,11 @@ const HomeExperience = ({ onLandingComplete }: HomeExperienceProps) => {
         if (!targetId) return;
 
         const timeoutId = window.setTimeout(() => {
-            document
-                .getElementById(targetId)
-                ?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            window.dispatchEvent(
+                new CustomEvent('navigate-section', {
+                    detail: { sectionId: targetId },
+                })
+            );
         }, 180);
 
         if (state?.scrollTo) {
@@ -67,9 +70,10 @@ const HomeExperience = ({ onLandingComplete }: HomeExperienceProps) => {
                 <Gallery id="gallery" />
                 <Clients id="clients" />
                 <About id="about" />
+                <Team id="team" />
                 <Contact id="contact" />
             </HorizontalScrollContainer>
-        </div >
+        </div>
     );
 };
 

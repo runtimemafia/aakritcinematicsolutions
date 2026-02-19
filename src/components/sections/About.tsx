@@ -1,246 +1,93 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import clsx from 'clsx';
-
-import UrviSvg from '../../assets/Team/URvi-01.svg';
-import ChiragSvg from '../../assets/Team/CHIRAG-01.svg';
-import ParasSvg from '../../assets/Team/PARAS-01.svg';
-import RupeshSvg from '../../assets/Team/RUPESH-01.svg';
-
-interface TeamMember {
-    id: number;
-    name: string;
-    role: string;
-    description: string;
-    image: string;
-}
-
-const teamMembers: TeamMember[] = [
-    {
-        id: 1,
-        name: "Urvi Shah",
-        role: "Founder & Studio Head",
-        description: "Visionary leader driving Aakrit's mission to elevate Indian animation to global standards through creative excellence and strategic innovation.",
-        image: UrviSvg,
-    },
-    {
-        id: 2,
-        name: "Chirag K. Mali",
-        role: "Creative Head",
-        description: "Artistic visionary specializing in immersive visual storytelling and conceptual architecture, transforming bold ideas into cinematic reality.",
-        image: ChiragSvg,
-    },
-    {
-        id: 3,
-        name: "Paras Sharma",
-        role: "3D Generalist",
-        description: "Technical expert in high-fidelity computer graphics, dedicated to crafting hyper-realistic environments and seamless visual effects.",
-        image: ParasSvg,
-    },
-    {
-        id: 4,
-        name: "Rupesh Gupta",
-        role: "Multimedia Artist",
-        description: "Versatile multimedia expert specializing in high-impact visual storytelling, motion design, and integrated digital experiences that bridge art and technology.",
-        image: RupeshSvg,
-    },
-];
+import useMediaQuery from '../../hooks/useMediaQuery';
 
 interface AboutProps {
     id?: string;
     className?: string;
 }
 
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+    },
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' as const } },
+};
+
 const About = ({ id = 'about', className }: AboutProps) => {
-    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-    const [tappedIndex, setTappedIndex] = useState<number | null>(null);
-
-    const activeIndex = hoveredIndex ?? tappedIndex;
-
-    const handleTap = (index: number) => {
-        setTappedIndex(prev => (prev === index ? null : index));
-    };
+    const isDesktop = useMediaQuery('(min-width: 1024px)');
 
     return (
         <section
             id={id}
             className={clsx(
-                'min-h-[100dvh] w-screen flex flex-col items-center justify-center bg-primary flex-shrink-0 relative overflow-hidden py-20 lg:pt-48 lg:pb-10',
+                "min-h-screen w-screen flex-shrink-0 flex items-center justify-center bg-transparent relative overflow-visible py-12 md:py-20 px-4 md:px-8",
                 className
             )}
         >
-            <div className="w-full max-w-7xl mx-auto px-4 relative z-10 flex flex-col items-center py-12 md:py-20 lg:py-24">
+            <div className="w-full max-w-[1240px] mx-auto relative z-10 flex justify-center items-center">
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="flex flex-col items-center justify-center space-y-4 mb-16 md:mb-24 lg:mb-32"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.01 }}
+                    variants={containerVariants}
+                    className="flex flex-col items-center w-full"
                 >
-                    <h1
-                        className="text-5xl sm:text-6xl md:text-8xl lg:text-[60rem] font-black tracking-tighter text-black/10 drop-shadow-[0_4px_12px_rgba(0,0,0,0.1)] text-center select-none uppercase leading-none whitespace-nowrap lg:whitespace-normal"
-                        style={{ fontFamily: "'Special Gothic Expanded One', sans-serif" }}
+                    {/* Strictly Narrow (850px) Glass Container with Professional Airy Layout */}
+                    <motion.div
+                        variants={itemVariants}
+                        className="w-full glass-card !bg-white running-border rounded-[4rem] md:rounded-[6rem] relative pt-24 pb-32 md:pt-32 md:pb-48"
+                        style={{ maxWidth: isDesktop ? '850px' : 'calc(100% - 2rem)', backgroundColor: 'white' }}
                     >
-                        About Us
-                    </h1>
-                    <div className="h-1.5 w-24 md:h-2 md:w-96 bg-black rounded-full opacity-60 shadow-md shrink-0" />
-                </motion.div>
-
-                {/* Team Cards Container */}
-                <div className="flex flex-wrap lg:flex-nowrap gap-10 md:gap-16 lg:gap-20 justify-center w-full px-4 overflow-visible">
-                    {teamMembers.map((member, index) => {
-                        const isActive = activeIndex === index;
-                        const hasActive = activeIndex !== null;
-                        const isLastCard = index === teamMembers.length - 1;
-
-                        return (
-                            <motion.div
-                                key={member.name}
-                                className={clsx(
-                                    "relative flex-shrink-0 group transition-all duration-500",
-                                    isActive ? "z-50" : "z-10"
-                                )}
-                                style={{ width: 'clamp(220px, 18vw, 280px)' }}
-                                onMouseEnter={() => setHoveredIndex(index)}
-                                onMouseLeave={() => setHoveredIndex(null)}
-                                onClick={() => handleTap(index)}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.1, duration: 0.5 }}
-                            >
-                                <div
-                                    className="relative"
-                                    style={{
-                                        perspective: '1200px',
-                                        width: 'clamp(220px, 18vw, 280px)',
-                                        height: '100%',
-                                        minHeight: typeof window !== 'undefined' && window.innerWidth < 1024 ? '380px' : 'auto'
-                                    }}
-                                >
-                                    <motion.div
-                                        className="relative w-full h-full"
-                                        style={{ transformStyle: 'preserve-3d' }}
-                                        animate={{
-                                            rotateY: (typeof window !== 'undefined' && window.innerWidth < 1024 && isActive) ? 180 : 0
-                                        }}
-                                        transition={{
-                                            type: "spring",
-                                            stiffness: 100,
-                                            damping: 20
-                                        }}
-                                    >
-                                        {/* Main SVG Card (Front Face on Mobile) */}
-                                        <motion.div
-                                            className={clsx(
-                                                'relative cursor-pointer transition-all duration-500 rounded-[2.5rem] md:rounded-[3rem]',
-                                                hasActive && !isActive && 'blur-sm scale-[0.9] opacity-30 shadow-none'
-                                            )}
-                                            animate={{
-                                                scale: isActive ? 1.05 : 1,
-                                                x: (isActive && isLastCard && typeof window !== 'undefined' && window.innerWidth >= 1024) ? '-40%' : '0%',
-                                            }}
-                                            transition={{
-                                                type: "spring",
-                                                stiffness: 260,
-                                                damping: 20
-                                            }}
-                                            style={{
-                                                zIndex: 40,
-                                                backfaceVisibility: typeof window !== 'undefined' && window.innerWidth < 1024 ? 'hidden' : 'visible',
-                                                boxShadow: isActive
-                                                    ? '0 40px 80px rgba(0,0,0,0.6), 0 0 30px rgba(242,221,94,0.3)'
-                                                    : '0 15px 35px rgba(0,0,0,0.15)',
-                                            }}
-                                        >
-                                            <img
-                                                src={member.image}
-                                                alt={member.name}
-                                                className="w-full h-auto block rounded-[2.5rem] md:rounded-[3rem]"
-                                                draggable={false}
-                                            />
-                                        </motion.div>
-
-                                        {/* Info Panel - Slides on desktop, Back face on mobile */}
-                                        <AnimatePresence>
-                                            {isActive && (
-                                                <motion.div
-                                                    initial={typeof window !== 'undefined' && window.innerWidth < 1024 ? {
-                                                        opacity: 0,
-                                                        rotateY: 180
-                                                    } : {
-                                                        x: '5%',
-                                                        opacity: 0,
-                                                        scale: 0.95
-                                                    }}
-                                                    animate={typeof window !== 'undefined' && window.innerWidth < 1024 ? {
-                                                        opacity: 1,
-                                                        rotateY: 180
-                                                    } : {
-                                                        x: isLastCard ? '30%' : '60%',
-                                                        opacity: 1,
-                                                        scale: 1
-                                                    }}
-                                                    exit={typeof window !== 'undefined' && window.innerWidth < 1024 ? {
-                                                        opacity: 0,
-                                                        rotateY: 180
-                                                    } : {
-                                                        x: '5%',
-                                                        opacity: 0,
-                                                        scale: 0.95
-                                                    }}
-                                                    transition={{
-                                                        type: "spring",
-                                                        stiffness: 150,
-                                                        damping: 25
-                                                    }}
-                                                    className="absolute z-10 rounded-[2.5rem] md:rounded-[4rem] flex flex-col justify-center border backdrop-blur-3xl overflow-hidden"
-                                                    style={{
-                                                        top: typeof window !== 'undefined' && window.innerWidth < 1024 ? '0' : '10%',
-                                                        left: '0',
-                                                        width: typeof window !== 'undefined' && window.innerWidth < 1024 ? '100%' : '160%',
-                                                        height: typeof window !== 'undefined' && window.innerWidth < 1024 ? '100%' : '80%',
-                                                        paddingLeft: typeof window !== 'undefined' && window.innerWidth < 1024 ? '1.5rem' : '35%',
-                                                        paddingRight: '1.5rem',
-                                                        paddingTop: '1.5rem',
-                                                        paddingBottom: '1.5rem',
-                                                        background: 'rgba(10, 10, 10, 0.98)',
-                                                        borderColor: 'rgba(242, 221, 94, 0.4)',
-                                                        boxShadow: '0 30px 60px rgba(0,0,0,0.8)',
-                                                        backfaceVisibility: typeof window !== 'undefined' && window.innerWidth < 1024 ? 'hidden' : 'visible',
-                                                        pointerEvents: typeof window !== 'undefined' && window.innerWidth < 1024 ? 'auto' : 'none',
-                                                        transform: typeof window !== 'undefined' && window.innerWidth < 1024 ? 'rotateY(180deg)' : 'none'
-                                                    }}
-                                                >
-                                                    <div className="space-y-3 md:space-y-4 text-left">
-                                                        <h3
-                                                            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tight leading-tight"
-                                                            style={{
-                                                                fontFamily: "'Special Gothic Expanded One', sans-serif",
-                                                                color: '#F2DD5E',
-                                                                textShadow: '0 2px 10px rgba(0,0,0,0.8)'
-                                                            }}
-                                                        >
-                                                            {member.name}
-                                                        </h3>
-                                                        <p className="text-xs sm:text-sm md:text-base font-extrabold uppercase tracking-[0.3em] md:tracking-[0.4em] text-[#F2DD5E]">
-                                                            {member.role}
-                                                        </p>
-                                                    </div>
-                                                    <div className="h-[2px] md:h-[3px] w-12 md:w-16 bg-[#F2DD5E] my-4 md:my-6 lg:my-8 rounded-full" />
-                                                    <p className="text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed font-bold text-[#FFA500]">
-                                                        {member.description}
-                                                    </p>
-                                                </motion.div>
-                                            )}
-                                        </AnimatePresence>
-                                    </motion.div>
-                                </div>
+                        <div className="flex flex-col items-center relative z-10 px-[10%] md:px-[15%] lg:px-[20%]">
+                            {/* Heading - Center Aligned */}
+                            <motion.div variants={itemVariants} className="text-center mb-12 md:mb-16">
+                                <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-black tracking-tight uppercase">
+                                    About Us
+                                </h2>
+                                <div className="accent-bar" style={{ width: '100px', height: '4px', opacity: 0.4 }} />
                             </motion.div>
-                        );
-                    })}
-                </div>
+
+                            {/* Body Text - Airy spacing & Justified alignment */}
+                            <div className="flex flex-col space-y-10 md:space-y-14 text-sm md:text-lg lg:text-xl leading-relaxed text-black/95 font-normal text-justify mx-auto w-full">
+
+                                <motion.p variants={itemVariants}>
+                                    Aakrit Cinematic Solutions was born from a simple yet powerful thought — to contribute to India’s animation and film industry and show the world its true creative strength. What began as a spark has now evolved into a mission: to build a full-spectrum production house that excels in movies, animation, VFX, 3D visualization, editing, and every craft that brings imagination to life.
+                                </motion.p>
+
+                                <motion.p variants={itemVariants}>
+                                    The name Aakrit, rooted in Sanskrit, means “to create”. It represents our cultural foundation and the belief that creation is the most transformative act. Staying grounded in our Sanskriti keeps us humble; our ambition pushes us to innovate, experiment, and deliver on global standards.
+                                </motion.p>
+
+                                <motion.p variants={itemVariants}>
+                                    We are architects of imagination, designers of emotion, and creators of immersive experiences. Our vision is bold: To place Indian animation and production on the global map, proving that our industry is not just evolving — it is roaring with potential and brilliance.
+                                </motion.p>
+
+                                <motion.p variants={itemVariants}>
+                                    At Aakrit Cinematic Solutions, every frame is creation, every project is passion, and every story is a new possibility. From the smallest detail to the final output — excellence is non-negotiable.
+                                </motion.p>
+
+                                {/* Taglines - Center Aligned Conclusion */}
+                                <motion.div variants={itemVariants} className="mt-8 md:mt-12 text-center w-full">
+                                    <div className="flex flex-col gap-y-3 md:gap-y-5 text-xl md:text-2xl lg:text-3xl text-tagline font-bold italic items-center">
+                                        <p>This is Aakrit.</p>
+                                        <p>Bringing ideas to life.</p>
+                                        <p>Pure Cinematic Creation.</p>
+                                    </div>
+                                    <div className="h-[2px] w-full max-w-[300px] mx-auto bg-[#FEA800]/20 mt-10" />
+                                </motion.div>
+                            </div>
+                        </div>
+                    </motion.div>
+                </motion.div>
             </div>
-        </section >
+        </section>
     );
 };
 

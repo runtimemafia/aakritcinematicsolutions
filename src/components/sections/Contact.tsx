@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Mail, MapPin, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
 
@@ -37,7 +37,7 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
         <section
             id={id}
             className={clsx(
-                "h-[100dvh] w-screen flex items-center justify-center bg-background flex-shrink-0 relative overflow-hidden py-20 lg:pt-48 lg:pb-10",
+                "h-[100dvh] w-screen flex items-center justify-center bg-background flex-shrink-0 relative overflow-hidden pt-32 pb-20 lg:pt-48 lg:pb-10",
                 className
             )}
         >
@@ -60,37 +60,7 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                             </h2>
 
                             <div className="space-y-8">
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    whileInView={{ opacity: 1 }}
-                                    transition={{ delay: 0.2, duration: 0.6 }}
-                                    className="group"
-                                >
-                                    <div className="flex items-start gap-4">
-                                        <Mail className="w-5 h-5 text-accent mt-1" />
-                                        <div>
-                                            <p className="text-xs uppercase tracking-wider text-muted mb-1">Email</p>
-                                            <a href="mailto:hello@aarkit.com" className="text-text hover:text-accent transition-colors text-lg">
-                                                hello@aarkit.com
-                                            </a>
-                                        </div>
-                                    </div>
-                                </motion.div>
-
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    whileInView={{ opacity: 1 }}
-                                    transition={{ delay: 0.3, duration: 0.6 }}
-                                    className="group"
-                                >
-                                    <div className="flex items-start gap-4">
-                                        <MapPin className="w-5 h-5 text-accent mt-1" />
-                                        <div>
-                                            <p className="text-xs uppercase tracking-wider text-muted mb-1">Location</p>
-                                            <p className="text-text text-lg">Los Angeles, CA</p>
-                                        </div>
-                                    </div>
-                                </motion.div>
+                                {/* Contact info removed as per request */}
                             </div>
                         </motion.div>
                     </div>

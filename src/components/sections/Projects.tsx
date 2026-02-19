@@ -1,111 +1,144 @@
-import { motion } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
 import clsx from 'clsx';
+import { useEffect, useState } from 'react';
+import { supabase } from '../../lib/supabaseClient';
 
-interface ProjectsProps {
-    id?: string;
-    className?: string;
-}
+function Portfolio({
+    id = "portfolio", className
+}: { id?: string; className?: string; }) {
+    const [videos, setVideos] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-const Projects = ({ id = "projects", className }: ProjectsProps) => {
-    const projects = [
-        {
-            id: 1,
-            title: "Apex Dynamics",
-            category: "Brand Film",
-            year: "2024",
-            color: "from-emerald-500/20 to-teal-600/20"
-        },
-        {
-            id: 2,
-            title: "Nebula Protocol",
-            category: "Commercial",
-            year: "2024",
-            color: "from-violet-500/20 to-purple-600/20"
-        },
-        {
-            id: 3,
-            title: "Vertex Labs",
-            category: "Documentary",
-            year: "2023",
-            color: "from-blue-500/20 to-cyan-600/20"
-        },
-        {
-            id: 4,
-            title: "Meridian Rise",
-            category: "Music Video",
-            year: "2023",
-            color: "from-amber-500/20 to-orange-600/20"
-        },
-    ];
+    useEffect(() => {
+        const fetchVideos = async () => {
+            try {
+                // Check for environment variables
+                const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+                const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+                if (!supabaseUrl || !supabaseKey) {
+                    throw new Error("Missing Supabase environment variables! Check your .env file or build configuration.");
+                }
+
+                const { data, error } = await supabase.from('portfolio').select('*').limit(6);
+
+                if (error) throw error;
+
+                if (data) {
+                    console.log('Portfolio videos:', data);
+                    setVideos(data);
+                }
+            } catch (err: any) {
+                console.error('Error fetching portfolio:', err);
+                setError(err.message || 'Failed to load videos');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchVideos();
+    }, []);
+
+    const getYoutubeId = (url: string) => {
+        if (!url) return null;
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
+    };
 
     return (
         <section
             id={id}
-            className={clsx(
-                "h-[100dvh] w-screen flex items-center justify-center bg-secondary flex-shrink-0 relative overflow-hidden py-20 lg:pt-48 lg:pb-10",
-                className
-            )}
+            className={clsx("h-[100dvh] w-full lg:w-screen flex flex-col bg-background flex-shrink-0 relative", className)}
+            style={{ paddingTop: '100px', paddingBottom: '130px' }}
         >
-            <div className="w-full max-w-7xl px-8">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="mb-12"
+            {/* Hide scrollbar CSS */}
+            <style>{`
+                .portfolio-scroll::-webkit-scrollbar { display: none; }
+                .portfolio-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+            `}</style>
+
+            {/* HEADING */}
+            <div className="flex-shrink-0 text-center px-8" style={{ position: 'relative', zIndex: 10, marginBottom: '50px' }}>
+                <h2
+                    className="font-black text-text uppercase tracking-[0.2em] text-center"
+                    style={{ fontSize: '3.5rem' }}
                 >
-                    <span className="text-accent text-xs uppercase tracking-[0.3em] font-mono mb-6 block">Selected Work</span>
-                    <h2 className="text-display-md font-display font-bold text-text leading-tight">
-                        Recent<br />
-                        <span className="text-accent">Projects</span>
-                    </h2>
-                </motion.div>
+                    OUR PORTFOLIO
+                </h2>
+                <div style={{ width: '960px', height: '4px', background: '#000000', margin: '2px auto 0', borderRadius: '2px' }} />
+            </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
-                    {projects.map((project, index) => (
-                        <motion.div
-                            key={project.id}
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.1, duration: 0.6 }}
-                            className="group relative h-[400px] overflow-hidden cursor-pointer rounded-xl"
+            {/* SCROLLABLE VIDEO CONTAINER */}
+            <div className="flex-1 overflow-y-auto overflow-x-hidden portfolio-scroll mb-8" style={{ background: 'rgba(254, 168, 0, 0.85)', borderRadius: '32px', maxWidth: '96%', margin: '0 auto' }}>
+                <div className="w-full mx-auto" style={{ padding: '40px' }}>
+                    {loading ? (
+                        <div className="text-center text-white/50 py-10">
+                            <p>Loading portfolio...</p>
+                        </div>
+                    ) : error ? (
+                        <div className="text-center text-red-500 py-10">
+                            <p className="font-bold">Error loading videos:</p>
+                            <p>{error}</p>
+                            <p className="text-sm mt-2 text-white/60">Check console for details.</p>
+                        </div>
+                    ) : (!videos || videos.length === 0) ? (
+                        <div className="text-center text-white/50 py-10">
+                            <p>No videos found in the portfolio.</p>
+                        </div>
+                    ) : (
+                        <div
+                            className="grid grid-cols-3 gap-[20px]"
+                            style={{ gridAutoRows: 'calc((100vh - 520px) / 2)' }}
                         >
-                            {/* Glassmorphism Container */}
-                            <div className="absolute inset-0 bg-surface/50 backdrop-blur-sm border border-white/5 transition-all duration-500 group-hover:border-accent/50 group-hover:bg-surface/80 z-0" />
+                            {videos.map((video, index) => {
+                                if (!video) return null;
 
-                            {/* Gradient Overlay */}
-                            <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-0 group-hover:opacity-30 transition-opacity duration-500 z-0`} />
+                                const videoInitial = String(video.youtube_url || video.link || video.url || video.video_link || video.video_url || "");
+                                const videoId = getYoutubeId(videoInitial);
 
-                            {/* Content */}
-                            <div className="relative z-10 h-full p-8 flex flex-col justify-between transition-transform duration-500 group-hover:scale-[1.02]">
-                                <div className="flex justify-between items-start">
-                                    <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-accent text-xs uppercase tracking-[0.2em] font-mono backdrop-blur-md">
-                                        {project.category}
-                                    </span>
-                                    <span className="text-muted text-xs font-mono">{project.year}</span>
-                                </div>
+                                let gridClass = "col-span-1 row-span-1";
 
-                                <div>
-                                    <h3 className="text-3xl md:text-4xl font-display font-bold text-text mb-4 group-hover:text-accent transition-colors duration-300 drop-shadow-lg">
-                                        {project.title}
-                                    </h3>
-                                    <div className="flex items-center gap-2 text-muted group-hover:text-text transition-colors duration-300">
-                                        <span className="text-sm uppercase tracking-wider font-medium">View Case Study</span>
-                                        <div className="p-1 rounded-full bg-white/5 group-hover:bg-accent group-hover:text-black transition-colors duration-300">
-                                            <ArrowUpRight className="w-4 h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
+                                if (index === 0) {
+                                    gridClass = "col-span-2 row-span-2"; // Big top-left
+                                } else if (index === 1) {
+                                    gridClass = "col-start-3 row-start-1"; // Small top-right
+                                } else if (index === 2) {
+                                    gridClass = "col-start-3 row-start-2"; // Small mid-right
+                                } else if (index === 3) {
+                                    gridClass = "col-start-1 row-start-3"; // Small bottom-left
+                                } else if (index === 4) {
+                                    gridClass = "col-start-1 row-start-4"; // Small bottom-left
+                                } else if (index === 5) {
+                                    gridClass = "col-span-2 row-span-2 col-start-2 row-start-3"; // Big bottom-right
+                                }
+
+                                if (!videoId) return null;
+
+                                return (
+                                    <div
+                                        key={video.id || index}
+                                        className={clsx(
+                                            "relative overflow-hidden rounded-2xl bg-black/30 border border-white/10 p-2 transition-all duration-300 hover:shadow-[0_0_45px_rgba(255,255,0,0.8)] hover:border-yellow-400/60",
+                                            gridClass
+                                        )}
+                                    >
+                                        <div className="w-full h-full overflow-hidden rounded-xl">
+                                            <iframe
+                                                src={`https://www.youtube.com/embed/${videoId}`}
+                                                title={video.Title || `Portfolio Video ${index + 1}`}
+                                                className="w-full h-full object-cover"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowFullScreen
+                                            />
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-
-                            {/* Hover Glow Effect */}
-                            <div className="absolute -inset-px bg-gradient-to-r from-accent/0 via-accent/20 to-accent/0 opacity-0 group-hover:opacity-100 blur-lg transition-opacity duration-500 pointer-events-none" />
-                        </motion.div>
-                    ))}
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
             </div>
         </section>
     );
 };
-
-export default Projects;
+export default Portfolio;
