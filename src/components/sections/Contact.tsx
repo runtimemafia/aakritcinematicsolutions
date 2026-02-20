@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
+import DiagonalGallery from "./DiagonalGallery";
 
 interface ContactProps {
   id?: string;
@@ -37,22 +38,29 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
       )}
     >
       {/* Grid Background */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#2a2a2a_1px,transparent_1px),linear-gradient(to_bottom,#2a2a2a_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-10" />
+      <div className="absolute inset-0 bg-black/90 pointer-events-none z-0" />
+
+      {/* Aligned Diagonal Gallery Background Decoration */}
+      <div className="absolute top-0 right-[5%] w-[60%] h-full pointer-events-none z-0 opacity-40 overflow-hidden flex items-center justify-center">
+        <DiagonalGallery className="!h-[150%] !w-full" />
+      </div>
+
+      <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-transparent pointer-events-none z-1" />
 
       <div className="w-full px-8 md:px-16 relative z-10">
-        <div className="w-full max-w-[860px]">
+        <div className="w-full max-w-[600px]">
 
           {/* Eyebrow + Heading */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mb-8"
+            className="mb-4"
           >
-            <span className="text-accent text-[11px] uppercase tracking-[0.3em] font-mono mb-3 block">
+            <span className="text-accent text-[10px] uppercase tracking-[0.3em] font-mono mb-2 block">
               Get in Touch
             </span>
-            <h2 style={{ fontSize: "3.75rem", lineHeight: 1.1 }} className="font-display font-bold text-text">
+            <h2 style={{ fontSize: "2.75rem", lineHeight: 1.1 }} className="font-display font-bold text-text">
               Let's Create<br />
               <span className="text-accent">Together</span>
             </h2>
@@ -63,12 +71,12 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="bg-orange-500/10 backdrop-blur-sm rounded-2xl p-10"
+            className="bg-orange-500/10 backdrop-blur-sm rounded-2xl p-6 md:p-8"
           >
             <form onSubmit={handleSubmit} className="contact-form">
 
               {/* Name */}
-              <div style={{ marginBottom: "20px" }}>
+              <div style={{ marginBottom: "12px" }}>
                 <input
                   type="text"
                   placeholder="Name"
@@ -78,7 +86,7 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
               </div>
 
               {/* Email */}
-              <div style={{ marginBottom: "20px" }}>
+              <div style={{ marginBottom: "12px" }}>
                 <input
                   type="email"
                   placeholder="Email"
@@ -88,7 +96,7 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
               </div>
 
               {/* Project Type */}
-              <div style={{ marginBottom: "20px" }}>
+              <div style={{ marginBottom: "12px" }}>
                 <input
                   type="text"
                   placeholder="Project Type"
@@ -97,22 +105,36 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
               </div>
 
               {/* Message */}
-              <div style={{ marginBottom: "24px" }}>
+              <div style={{ marginBottom: "12px" }}>
                 <textarea
-                  rows={6}
+                  rows={1}
                   placeholder="Message"
-                  className="w-full bg-white/50 border border-white/20 rounded-2xl px-5 py-3 text-sm text-text placeholder:text-muted/60 focus:border-orange-400/60 focus:outline-none backdrop-blur-sm transition-all duration-200 resize-none leading-relaxed"
+                  className="w-full bg-white/50 border border-white/20 rounded-full px-5 py-3 text-sm text-text placeholder:text-muted/60 focus:border-orange-400/60 focus:outline-none backdrop-blur-sm transition-all duration-200 resize-none leading-relaxed min-h-[52px]"
                 />
               </div>
 
               {/* Submit */}
               <button
                 type="submit"
-                className="group flex items-center gap-3 px-8 h-12 bg-accent text-background font-semibold uppercase tracking-widest text-xs rounded-full hover:opacity-90 transition-all duration-300 hover:shadow-[0_0_28px_rgba(0,255,136,0.35)] hover:scale-[1.01]"
+                className="group flex items-center gap-3 px-8 h-12 bg-accent text-background font-semibold uppercase tracking-widest text-xs rounded-full hover:opacity-90 transition-all duration-300 hover:shadow-[0_0_28px_rgba(0,255,136,0.35)] hover:scale-[1.01] mb-6"
               >
                 <span>Send Message</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
               </button>
+
+              {/* Contact Details (Large) */}
+              <div className="flex flex-col gap-2 mt-4 px-2">
+                <div className="flex items-center gap-3 text-lg md:text-xl font-bold text-text">
+                  <span className="text-2xl">📍</span>
+                  <span>Chembur</span>
+                </div>
+                <div className="flex items-center gap-3 text-lg md:text-xl font-bold text-text">
+                  <span className="text-2xl">✉️</span>
+                  <a href="mailto:studio@aakritcinematic.in" className="hover:text-accent transition-colors">
+                    studio@aakritcinematic.in
+                  </a>
+                </div>
+              </div>
 
               {/* Success message */}
               {status === "success" && (
