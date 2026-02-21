@@ -44,8 +44,8 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
             {/* Grid Background */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#2a2a2a_1px,transparent_1px),linear-gradient(to_bottom,#2a2a2a_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-10" />
 
-            <div className="ml-[4em] max-w-7xl w-full px-8 relative z-10 flex flex-col justify-center">
-                <div className="w-full max-w-[800px] lg:ml-24">
+            <div className="mx-auto max-w-[1400px] w-full px-8 md:px-16 lg:px-24 xl:px-32 relative z-10 flex flex-col justify-center">
+                <div className="w-full max-w-[800px]">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -116,7 +116,7 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                         </div>
 
                         {status === 'success' && (
-                            <p className="absolute bottom-[1em] text-text text-sm uppercase tracking-[0.3em] font-medium mt-4">
+                            <p className="absolute bottom-[-3em] text-text text-sm uppercase tracking-[0.3em] font-medium mt-4">
                                 Message queued — we’ll reply within 24 hours.
                             </p>
                         )}
